@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models;
+@model Tuple<int, List<Book>, string>
+<body>
+    @section links{
+        <ul class="nav navbar-nav navbar-right">
+            @if (CRUD.CuserID == 0)
+            {
+                <li><a href="~/home/Login"><span class="glyphicon glyphicon-user"></span> Hello, Sign in</a></li>
+            }
+            else
+            {
+                <li><a href="~/home/Profile"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>
+            }
+        </ul>
+    }
+    <div class="container">
+        <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:20px;">
+            <h3 style="margin:10px">Your Order:</h3>
+            @{ Single totalPrice=0;int pricewd = 0;}
+            @foreach (Book bk in Model.Item2)
+            {
+                <div class="col-sm-12">
+                    <label>Name: </label>@bk.title<br />
+                    <label>Price: </label>@bk.price $<br />
+                    <label>Discount: </label>@bk.discount %<br />
+                    <label>Quantity: </label>@bk.book_count<br />
+                        <p hidden>@Convert.ToSingle(@totalPrice)= @Convert.ToSingle(@totalPrice) + @Convert.ToSingle(2)*(@Convert.ToSingle(@Convert.ToSingle(@bk.price) * @Convert.ToSingle(@Convert.ToSingle(1) - (@Convert.ToSingle(@Convert.ToSingle(@bk.discount) / 100)))));</p>
+                        <p hidden>@pricewd=@pricewd+@bk.price;</p>
+                </div>
+            }
+
+        <div class="col-sm-12" style="margin-top:20px;">
+            <hr />
+            <label>Price(without discount): </label>@pricewd<br />
+            <label>Total: </label>@totalPrice
+            <hr />
+            <div class="custom-control custom-radio">
+                <label>Payment Method:</label><br />
+                <input type="radio" id="cashonDelivery" name="cashonDelivery" class="custom-control-input">
+                <label>Cash on Delivery</label>
+            </div>
+            <hr />
+        </div>
+
+            <div class="col-sm-12" style="margin:10px;">
+                <form method="post" action="../home/ConfirmOrder">
+                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#confirmOrderModal">
+                        Confirm Order
+                    </button>
+                </form>
+
+                <div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" aria-labelledby="confirmOrder" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h5 class="modal-title " id="confirmOrder"><label>@Model.Item3</label></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="row">
+                                        @{ var date = DateTime.Now; date.ToString();}
+                                        <label>Date: </label>@date<br />
+                                        <label>Price: </label>@totalPrice<br />
+                                        <label>Quantity: </label>@Model.Item1<br />
+                                        <label>Books: </label><br />
+                                        @foreach (Book bk in Model.Item2)
+                                        {
+                                            <div class="col-sm-12">
+                                                <label>Name: </label>@bk.title<br />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <a href="~/home/Cart" class="btn btn-primary">Back to Cart</a>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+

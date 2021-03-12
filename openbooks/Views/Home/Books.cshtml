@@ -1,0 +1,503 @@
+﻿
+@{
+    ViewBag.Title = "Books | Admin Panel";
+    Layout = "~/Views/Shared/_adminlayout.cshtml";
+    Tuple<int, List<Book>> AllBooks = ViewBag.AllBooks;
+    string BookAdded = ViewBag.BookAdded;
+    Tuple<int, List<Book>> SearchedBook = ViewBag.SearchedBook;
+
+}
+@using openbooks.Models;
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails">Orders</a>
+                    <a href="~/home/UsersDetails">Users</a>
+                    <a href="~/home/Books" class="active">Books</a>
+                    <a href="~/home/Wishlistsdetails">Wishlists</a>
+                    <a href="~/home/Requestsdetails">Requests</a>
+                    <a href="~/home/Settings">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;width:80%;margin:auto;">
+
+                <h2>Remove/View/Add Books data</h2>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-12" style="padding-bottom:5px;">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddBookModal">
+                                Add New Book
+                            </button>
+                            @if (!string.IsNullOrEmpty(@BookAdded))
+                            {
+                                <h3>@BookAdded</h3>
+                            }
+
+                            <div class="modal fade" id="AddBookModal" tabindex="-1" role="dialog" aria-labelledby="AddBookModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary">
+                                            <h3 class="modal-title" id="AddBookModalLabel">Enter New Book Details: </h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form method="post" action="../Home/Addbook">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="title" class="col-form-label">Title</label>
+                                                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="author" class="col-form-label">Author</label>
+                                                    <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="isbn" class="col-form-label">ISBN</label>
+                                                    <input type="text" class="form-control" name="isbn" id="isbn" placeholder="ISBN">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="language" class="col-form-label">language</label>
+                                                    <input type="text" class="form-control" id="language" name="language" placeholder="Language">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description" class="col-form-label">description</label>
+                                                    <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price" class="col-form-label">Price</label>
+                                                    <input type="text" class="form-control" id="price" name="price" placeholder="price">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="discount" class="col-form-label">Discount</label>
+                                                    <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="category" class="col-form-label">Category</label>
+                                                    <input type="text" class="form-control" id="category" name="category" placeholder="Category">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="noofcopies" class="col-form-label">No of copies</label>
+                                                    <input type="text" class="form-control" id="noofcopies" name="noofcopies" placeholder="No of copies">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="pdate" class="col-form-label">Publication Date</label>
+                                                    @*<input class="form-control" type="text" name="pdate" id="pdate" placeholder="Publication Date">*@
+                                                    <input type="date" id="pdate" name="pdate" style="margin-left: 20px;">
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="../home/searchadminbook">
+                            <div class="form-group">
+                                <input type="search" class="form-control" name="searchterm" placeholder="Title | Author | ISBN" size="50" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getBooksForAdmin">
+                            <div class="form-group">
+                                <p hidden name="sectionNo" value="1"></p>
+                                <input type="hidden" value="1" name="sectionNo" />
+                                <button type="submit" class="btn btn-primary">New Arrival</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getBooksForAdmin">
+                            <div class="form-group">
+                                <p hidden name="sectionNo" value="2"></p>
+                                <input type="hidden" value="2" name="sectionNo" />
+                                <button type="submit" class="btn btn-primary">30% Off Books</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getBooksForAdmin">
+                            <div class="form-group">
+                                <p hidden name="sectionNo" value="3"></p>
+                                <input type="hidden" value="3" name="sectionNo" />
+                                <button type="submit" class="btn btn-primary">50% Off Books</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getBooksForAdmin">
+                            <div class="form-group">
+                                <p hidden name="sectionNo" value="5"></p>
+                                <input type="hidden" value="5" name="sectionNo" />
+                                <button type="submit" class="btn btn-primary">Sold Out Books</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getBooksForAdmin">
+                            <div class="form-group">
+                                <p hidden name="sectionNo" value="0"></p>
+                                <input type="hidden" value="0" name="sectionNo" />
+                                <button type="submit" class="btn btn-primary">View All Books</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <br />
+                @if (!(SearchedBook is null))
+                {
+                    if (SearchedBook.Item1 != -1)
+                    {
+                        foreach (Book bk in SearchedBook.Item2)
+                        {
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+
+                                <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;margin-bottom:20px;padding:20px;">
+
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <img src="~/imgs/dum1.png" style="height:70%;width:70%;" class="img-responsive" />
+                                        </div>
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="col-sm-4" style="text-align:right">
+                                                    <label>Title:</label><br />
+                                                    <label>Author:</label><br />
+                                                    <label>Price:</label><br />
+                                                    <label>Discount:</label><br />
+                                                    <label>Language:</label><br />
+                                                    <label>Category:</label><br />
+                                                    <label>Number Of Copies:</label><br />
+                                                    <label>Publishing Date:</label><br />
+                                                    <label>ISBN:</label><br />
+                                                    <label>Description: </label><br />
+                                                </div>
+                                                <div class="col-sm-8" style="font-family:Arial;">
+                                                    <label>@bk.title</label><br />
+                                                    <label>@bk.author</label><br />
+                                                    <label> @bk.price $</label><br />
+                                                    <label> @bk.discount %</label><br />
+                                                    <label>@bk.language </label><br />
+                                                    <label> @bk.category</label><br />
+                                                    <label> @bk.numberOfCopies</label><br />
+                                                    <label> @bk.publishingDate</label><br />
+                                                    <label> @bk.isbn</label><br />
+                                                    <label> @bk.description</label><br />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="row">
+
+
+
+                                        <div class="col-sm-12" style="padding-bottom:5px;">
+
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#EditBookModal">
+                                                Edit
+                                            </button>
+
+
+                                            <div class="modal fade" id="EditBookModal" tabindex="-1" role="dialog" aria-labelledby="EditBookModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary">
+                                                            <h3 class="modal-title" id="EditBookModalLabel">Enter Data to Update: </h3>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form method="post" action="../home/editBookInfo">
+                                                            <div class="modal-body">
+                                                                <p hidden name="bookid" value="@bk.bookID"></p>
+                                                                <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                                <div class="form-group">
+                                                                    <label for="title" class="col-form-label">Title</label>
+                                                                    <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="author" class="col-form-label">Author</label>
+                                                                    <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="isbn" class="col-form-label">ISBN</label>
+                                                                    <input type="text" class="form-control" name="isbn" id="isbn" placeholder="ISBN">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="language" class="col-form-label">language</label>
+                                                                    <input type="text" class="form-control" id="language" name="language" placeholder="Language">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="description" class="col-form-label">description</label>
+                                                                    <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="price" class="col-form-label">Price</label>
+                                                                    <input type="text" class="form-control" id="price" name="price" placeholder="price">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="discount" class="col-form-label">Discount</label>
+                                                                    <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="category" class="col-form-label">Category</label>
+                                                                    <input type="text" class="form-control" id="category" name="category" placeholder="Category">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="noofcopies" class="col-form-label">No of copies</label>
+                                                                    <input type="text" class="form-control" id="noofcopies" name="noofcopies" placeholder="No of copies">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="pdate" class="col-form-label">Publication Date</label>
+                                                                    @*<input class="form-control" type="text" name="pdate" id="pdate" placeholder="Publication Date">*@
+                                                                    <input type="date" id="pdate" name="pdate" style="margin-left: 20px;">
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="col-sm-12" style="padding-bottom:5px;">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelBookModal">
+                                                Remove
+                                            </button>
+
+
+                                            <div class="modal fade" id="DelBookModal" tabindex="-1" role="dialog" aria-labelledby="DelBookModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-danger">
+                                                            <h3 class="modal-title" id="DelBookModalLabel">Remove Book</h3>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Are you sure you want to Remove this book?</p>
+                                                        </div>
+                                                        <form method="post" action="../home/removeBook">
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+
+                                                                <p hidden name="bookid" value="@bk.bookID"></p>
+                                                                <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                                <button type="submit" class="btn btn-danger">Confirm</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+                        @if (!(AllBooks is null))
+                        {
+                            if (AllBooks.Item1 != -1)
+                            {
+                                foreach (Book bk in AllBooks.Item2)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+
+                                        <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;margin-bottom:20px;padding:20px;">
+
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <img src="~/imgs/dum1.png" style="height:70%;width:70%;" class="img-responsive" />
+                                                </div>
+                                                <div class="col-sm-10">
+                                                    <div class="row">
+                                                        <div class="col-sm-4" style="text-align:right">
+                                                            <label>Title:</label><br />
+                                                            <label>Author:</label><br />
+                                                            <label>Price:</label><br />
+                                                            <label>Discount:</label><br />
+                                                            <label>Language:</label><br />
+                                                            <label>Category:</label><br />
+                                                            <label>Number Of Copies:</label><br />
+                                                            <label>Publishing Date:</label><br />
+                                                            <label>ISBN:</label><br />
+                                                            <label>Description: </label><br />
+                                                        </div>
+                                                        <div class="col-sm-8" style="font-family:Arial;">
+                                                            <label>@bk.title</label><br />
+                                                            <label>@bk.author</label><br />
+                                                            <label> @bk.price $</label><br />
+                                                            <label> @bk.discount %</label><br />
+                                                            <label>@bk.language </label><br />
+                                                            <label> @bk.category</label><br />
+                                                            <label> @bk.numberOfCopies</label><br />
+                                                            <label> @bk.publishingDate</label><br />
+                                                            <label> @bk.isbn</label><br />
+                                                            <label> @bk.description</label><br />
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="row">
+
+
+
+                                                <div class="col-sm-12" style="padding-bottom:5px;">
+
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#EditBookModal">
+                                                        Edit
+                                                    </button>
+
+
+                                                    <div class="modal fade" id="EditBookModal" tabindex="-1" role="dialog" aria-labelledby="EditBookModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-primary">
+                                                                    <h3 class="modal-title" id="EditBookModalLabel">Enter Data to Update: </h3>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <form method="post" action="../home/editBookInfo">
+                                                                    <div class="modal-body">
+                                                                        <p hidden name="bookid" value="@bk.bookID"></p>
+                                                                        <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                                        <div class="form-group">
+                                                                            <label for="title" class="col-form-label">Title</label>
+                                                                            <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="author" class="col-form-label">Author</label>
+                                                                            <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="isbn" class="col-form-label">ISBN</label>
+                                                                            <input type="text" class="form-control" name="isbn" id="isbn" placeholder="ISBN">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="language" class="col-form-label">language</label>
+                                                                            <input type="text" class="form-control" id="language" name="language" placeholder="Language">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="description" class="col-form-label">description</label>
+                                                                            <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="price" class="col-form-label">Price</label>
+                                                                            <input type="text" class="form-control" id="price" name="price" placeholder="price">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="discount" class="col-form-label">Discount</label>
+                                                                            <input type="text" class="form-control" id="discount" name="discount" placeholder="Discount">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="category" class="col-form-label">Category</label>
+                                                                            <input type="text" class="form-control" id="category" name="category" placeholder="Category">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="noofcopies" class="col-form-label">No of copies</label>
+                                                                            <input type="text" class="form-control" id="noofcopies" name="noofcopies" placeholder="No of copies">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pdate" class="col-form-label">Publication Date</label>
+                                                                            @*<input class="form-control" type="text" name="pdate" id="pdate" placeholder="Publication Date">*@
+                                                                            <input type="date" id="pdate" name="pdate" style="margin-left: 20px;">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="col-sm-12" style="padding-bottom:5px;">
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelBookModal">
+                                                        Remove
+                                                    </button>
+
+
+                                                    <div class="modal fade" id="DelBookModal" tabindex="-1" role="dialog" aria-labelledby="DelBookModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-danger">
+                                                                    <h3 class="modal-title" id="DelBookModalLabel">Remove Book</h3>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>Are you sure you want to Remove this book?</p>
+                                                                </div>
+                                                                <form method="post" action="../home/removeBook">
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+
+                                                                        <p hidden name="bookid" value="@bk.bookID"></p>
+                                                                        <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                                        <button type="submit" class="btn btn-danger">Confirm</button>
+                                                                    </div>
+                                                                </form>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+        </div>
+
+
+    </div>
+    <br />
+    <br />
+</body>
+

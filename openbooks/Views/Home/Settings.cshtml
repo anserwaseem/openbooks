@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Settings | Admin Panel";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@model string
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails">Orders</a>
+                    <a href="~/home/Usersdetails">Users</a>
+                    <a href="~/home/Books">Books</a>
+                    <a href="~/home/Wishlistsdetails">Wishlists</a>
+                    <a href="~/home/Requestsdetails">Requests</a>
+                    <a href="~/home/Settings" class="active">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;padding:10px;width:80%;margin:auto;">
+                <form method="post" action="../Home/changeUserPassword">
+                    <div style="margin:30px">
+                        <h3>Change Password</h3>
+                        <div class="form-group">
+                            <label>Current Password: </label><br />
+                            <input type="password" class="form-control" id="pass" name="currentPassword" placeholder="Current Password">
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Password: </label><br />
+                            <input type="password" class="form-control" id="pass" name="newPassword" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password: </label>
+                            <input type="password" class="form-control" id="cpass" name="confirmNewPassword" placeholder="Confirm Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Password</button><b>&nbsp;&nbsp;@Model</b>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <br /><br />
+    <br /><br />
+</body>

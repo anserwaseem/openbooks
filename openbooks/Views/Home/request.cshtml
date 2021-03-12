@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "Request";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models;
+@model Tuple<string, List<Request>>
+<body>
+    <div class="container">
+        <form method="post" action="../home/requestThisBook" id="rtb">
+            <div class="register">
+                <h2>
+                    Request A book
+                </h2>
+                <br />
+                <div class="form-group">
+                    <label>Book Title</label>
+                    <input type="text" class="form-control" id="bookname" name="title" placeholder="Enter book title">
+                </div>
+                <div class="form-group">
+                    <label>Autor's Name</label>
+                    <input type="text" class="form-control" id="authorsname" name="author" placeholder="Enter Author's Name">
+                </div>
+                <div class="form-group">
+                        <label>ISBN (optional)</label>
+                        <input type="text" class="form-control" id="isbn" name="isbn" placeholder="Enter ISBN">
+                    </div>
+                @*<div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email">
+                </div>*@
+                <button type="submit" class="btn btn-primary" onclick="document.getElementById('rtb').submit()">Submit</button>
+
+            </div>
+        </form>
+    </div>
+    <div>
+        <h4>@Model.Item1</h4>
+    </div>
+    <div class="container">
+        <div class="col-sm-12">
+            <h3>Your Requests: </h3>
+            @foreach (Request rq in Model.Item2)
+            {
+                <label>Title:&nbsp;</label>@rq.title<br />
+                <label>Author:&nbsp;</label>@rq.author<br />
+                <label>Date:&nbsp;</label>@Convert.ToString(rq.requestedBookDate)
+                <br /><br />
+            }
+        </div>
+    </div>
+    <br />
+</body>
+

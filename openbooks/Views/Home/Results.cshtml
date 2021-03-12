@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models;
+@model  Tuple<int, List<Book>>
+
+<div class="container">
+    <div class="well">
+        <div class="row" style="padding:10px;">
+            
+                <form method="post" action="../Home/search">
+                    <div class="form-group">
+                        <input type="search" class="form-control" name="searchterm" placeholder="Title | Author | ISBN" size="50" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+          
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+<div class="row">
+    <div class="col-sm-12" style="box-shadow: 2px 8px 8px 4px lightblue;width: 95%;margin: auto;padding-bottom: 10px;">
+
+
+        <br />
+        
+        @foreach (Book bk in Model.Item2)
+        {
+            <div class="col-sm-3">
+                <div class="shadow-lg p-4 mb-4 bg-white">
+                    <div class="card">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <img src="~/imgs/dum.png" style="height:100px;width:60%;padding-top:10px">
+                            </div>
+
+
+                            <form method="post" action="../home/AddToCart" id="atc">
+                                <div class="col-sm-12">
+                                    <p>@bk.title</p>
+                                    <p class="price">Price: @bk.price</p>
+                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="submit" onclick="document.getElementById('atc').submit()">Add to Cart</button>
+                                </div>
+                            </form>
+                            <form method="post" action="../home/getbook" id="gb">
+                                <div class="col-sm-12">
+                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                    <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        }
+        
+    </div>
+</div>
+</div>
+<br />
+<br />

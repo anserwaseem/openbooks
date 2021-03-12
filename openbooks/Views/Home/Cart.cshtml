@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models;
+@model Tuple<int, List<Book>, string>
+<body>
+    @section links{
+        <ul class="nav navbar-nav navbar-right">
+            @if (!string.IsNullOrEmpty(Model.Item3))
+            {
+                <li>@Model.Item3</li>
+            }
+            @if (CRUD.CuserID == 0)
+            {
+                <li><a href="~/home/Login"><span class="glyphicon glyphicon-user"></span> Hello, Sign in</a></li>
+            }
+            else
+            {
+                <li><a href="~/home/Profile"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>
+            }
+        </ul>
+    }
+    <form method="post" action="../home/RemoveFromCart">
+        <div class="container">
+
+            <div class="row">
+                @if (Model.Item1 != 0)
+                {
+                    <h3>Your Cart: @Model.Item1</h3>
+                    foreach (Book bk in Model.Item2)
+                    {
+                        <div class="col-sm-12" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin-top:20px;">
+
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <img src="~/imgs/dum.png" style="height: 130px; width: 60%;padding-top: 10px">
+                                </div>
+                                <div class="col-sm-9">
+                                    <label>Name:&nbsp;</label>@bk.title<br />
+                                    <label>Discount:&nbsp;</label>@bk.discount %<br />
+                                    <label>Price:&nbsp;</label>@bk.price $<br />
+                                    <label>Quantity:&nbsp;</label>@bk.book_count<br />
+                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                    <button type="submit" class="btn btn-secondary" onclick="removeThisBookFromCart(@bk.bookID)">Remove Item</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="col-sm-12" style="margin-top:20px;">
+                        <a href="~/home/Checkout" class="btn btn-primary">Go to checkout</a>
+                    </div>
+                }
+                else
+                {
+                    <h3>Your Cart is empty</h3>
+                    <div class="col-sm-12" style="margin-top:20px;">
+                        <a href="~/home/Index" class="btn btn-primary">Go to home</a>
+                    </div>
+                }
+
+
+
+            </div>
+        </div>
+    </form>
+    <br />
+    <br />
+    <script type="text/javascript">
+        function removeThisBookFromCart(id) {
+            $("#hf").val(id);
+            $('form').submit();
+        }
+    </script>
+</body>

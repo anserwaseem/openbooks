@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="shortcut icon" href="~/imgs/logo.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.min.js">
+    @*<link rel="stylesheet" href="~/Extra/style.css">*@
+    <link rel="stylesheet" href="~/css/style.css">
+    @*<script src="~/Extra/jquery.min.js"></script>*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    @*<script src="~/Extra/bootstrap.min.js"></script>*@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <nav class="navbar navbar-light" style="box-shadow: 3px 3px 15px 4px cornflowerblue;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="~/home/index">OpenBooks</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form method="post" action="../home/logout">
+                        <button style="margin-top:8px;" type="submit" class="btn btn-link">Logout  <span class="glyphicon glyphicon-log-out"></span></button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div>
+        @RenderBody()
+    </div>
+    <footer class="panel-footer">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Links</h3>
+                <ul>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Facebook</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-12">
+                <div class="well text-center">
+                    <p>2020 Copyright <a href="#">openbooks.com</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Wishlist";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models
+@model Tuple<string, List<Book>>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+
+                    <div class="bookpage">
+                        <div class="row">
+                            <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue;padding:10px;width:100%;margin:auto;">
+                                <h3>
+                                    Wishlist:
+                                </h3>
+                                <h4>@Model.Item1</h4>
+                                <br />
+                                @foreach (Book bk in Model.Item2)
+                                {
+                                    <div class="col-sm-3" style="margin-top:15px">
+                                        <div class="shadow-lg p-4 mb-4 bg-white">
+                                            <div class="card">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <img src="~/imgs/dum1.png" class="img-responsive" style="height:100px;width:60%;margin:auto">
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <p>Title: </p>@bk.title
+                                                    </div>
+
+                                                    <div class="col-sm-12">
+                                                        <p class="price">Price: </p>@bk.price
+                                                    </div>
+                                                    <form method="post" action="../home/getbook" id="gb">
+                                                        <div class="col-sm-12">
+                                                            <p hidden name="bookid" value="@bk.bookID"></p>
+                                                            <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                            <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                                        </div>
+                                                    </form>
+                                                    <form method="post" action="../home/RemoveFromWishlist" id="rfwl">
+                                                        <div class="col-sm-12">
+                                                            <p hidden name="bookid" value="@bk.bookID"></p>
+                                                            <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                            <button type="submit" onclick="document.getElementById('rfwl').submit()">Remove From Wishlist</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>

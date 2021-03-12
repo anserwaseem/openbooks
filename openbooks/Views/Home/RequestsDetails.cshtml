@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "RequestsDetails | Admin Panel";
+    Layout = "~/Views/Shared/_adminlayout.cshtml";
+    Tuple<int, List<User>, List<Request>> req = ViewBag.Requests;
+}
+@using openbooks.Models;
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails">Orders</a>
+                    <a href="~/home/Usersdetails">Users</a>
+                    <a href="~/home/Books">Books</a>
+                    <a href="~/home/Wishlistsdetails">Wishlists</a>
+                    <a href="~/home/Requestsdetails" class="active">Requests</a>
+                    <a href="~/home/Settings">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;width:80%;margin:auto;">
+
+                <h2>View Requests data</h2>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="../home/SearchRequest">
+                            <div class="form-group">
+                                <input type="search" class="form-control" name="searchterm" placeholder="Full Name | Email" size="50" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/SearchRequest">
+                            <div class="form-group">
+                                <p hidden name="searchterm" value="all"></p>
+                                <input type="hidden" value="all" name="searchterm" />
+                                <button type="submit" class="btn btn-primary">View All Requests</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br />
+                @if (!(req is null))
+                {
+                    if (req.Item1 != -1)
+                    {
+                        foreach (User u in req.Item2)
+                        {
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                    <h4>User Details: </h4>
+                                    <label>
+                                        Name:
+                                    </label>@u.fullname<br />
+                                    <label>
+                                        Email:
+                                    </label>@u.email<br />
+                                    <label>
+                                        Phone:
+                                    </label>@u.phone<br />
+                                    <label>
+                                        Gender:
+                                    </label>@u.gender<br />
+                                    <label>
+                                        Status:
+                                    </label>@u.status<br />
+                                    <label>
+                                        Address:
+                                    </label>@u.line @u.city  @u.state @u.country @u.zipCode<br />
+                                    <label>
+                                        Registeration Time:
+                                    </label>@u.userRegisteredDatetime<br />
+                                    <label>
+                                        Details Addition Time:
+                                    </label>@u.userDetailsAdditionDatetime<br />
+                                </div>
+                            </div>
+                            foreach (Request r in req.Item3)
+                            {
+                                if (r.userid == u.userID && r.requestedBookDate == u.requestedBookDate)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                            <h4>Request: </h4>
+                                            <label>
+                                                Book Title:
+                                            </label>@r.title<br />
+                                            <label>
+                                                Book Author:
+                                            </label>@r.author<br />
+                                            <label>
+                                                Request Status:
+                                            </label>@r.status<br />
+                                            <label>
+                                                Request date:
+                                            </label>@r.requestedBookDate<br />
+
+                                        </div>
+                                    </div>
+                                    <br />
+                                    if (r.status == "requested")
+                                    {
+                                        <form method="post" action="../home/FulfilRequest">
+                                            <p hidden name="requestid" value="@r.requestid"></p>
+                                            <input type="hidden" value="@r.requestid" name="requestid" />
+                                            <button type="submit" class="btn btn-primary">Fulfil Request</button>
+                                        </form>
+                                    }
+                                }
+
+                            }
+                            <br /><br />
+                        }
+
+                    }
+                }
+            </div>
+        </div>
+
+
+    </div>
+    <br />
+    <br />
+</body>

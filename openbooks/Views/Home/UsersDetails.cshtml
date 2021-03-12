@@ -1,0 +1,293 @@
+﻿
+@{
+    ViewBag.Title = "UsersDetails | Admin Panel";
+    Layout = "~/Views/Shared/_adminlayout.cshtml";
+    Tuple<int, List<User>> SearchedUser = ViewBag.SearchedUser;
+    Tuple<int, List<User>> AllUsers = ViewBag.AllUsers;
+}
+@using openbooks.Models;
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails">Orders</a>
+                    <a href="~/home/Usersdetails" class="active">Users</a>
+                    <a href="~/home/Books">Books</a>
+                    <a href="~/home/Wishlistsdetails">Wishlists</a>
+                    <a href="~/home/Requestsdetails">Requests</a>
+                    <a href="~/home/Settings">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;width:80%;margin:auto;">
+
+                <h2>Remove/View Users data</h2>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="../home/searchuser">
+                            <div class="form-group">
+                                <input type="search" class="form-control" name="searchterm" placeholder="Full Name | Email" size="50" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/searchuser">
+                            <div class="form-group">
+                                <p hidden name="searchterm" value="all"></p>
+                                <input type="hidden" value="all" name="searchterm" />
+                                <button type="submit" class="btn btn-primary">View All Users</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br />
+                @if (!(SearchedUser is null))
+                {
+                    if (SearchedUser.Item1 != -1)
+                    {
+                        foreach (User u in SearchedUser.Item2)
+                        {
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;margin-bottom:20px;padding:20px;">
+                                    <label>
+                                        Name:
+                                    </label>@u.fullname<br />
+                                    <label>
+                                        Email:
+                                    </label>@u.email<br />
+                                    <label>
+                                        Phone:
+                                    </label>@u.phone<br />
+                                    <label>
+                                        Gender:
+                                    </label>@u.gender<br />
+                                    <label>
+                                        Status:
+                                    </label>@u.status<br />
+                                    <label>
+                                        Address:
+                                    </label>@u.line @u.city  @u.state @u.country @u.zipCode<br />
+                                    <label>
+                                        Registeration Time:
+                                    </label>@u.userRegisteredDatetime<br />
+                                    <label>
+                                        Details Addition Time:
+                                    </label>@u.userDetailsAdditionDatetime<br />
+
+                                    <br />
+                                    <br />
+
+
+                                    <br />
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="row">
+                                        @if (u.status != "deactivated")
+                                        {
+                                            <div class="col-sm-12" style="padding-bottom:5px;">
+
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelUserModal">
+                                                    Deactivate
+                                                </button>
+
+                                                <div class="modal fade" id="DelUserModal" tabindex="-1" role="dialog" aria-labelledby="DelUserModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger">
+                                                                <h3 class="modal-title" id="DelUserModalLabel">Deactivate Account</h3>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to deactivate this user?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                                <form method="post" action="../home/DeactivateUser">
+                                                                    <p hidden name="userid" value="@u.userID"></p>
+                                                                    <input type="hidden" value="@u.userID" name="userid" />
+                                                                    <button type="submit" class="btn btn-danger">Confirm</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+
+                                        @if (u.status == "deactivated")
+                                        {
+                                            <div class="col-sm-12" style="padding-bottom:5px;">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ActUserModal">
+                                                    Re-activate
+                                                </button>
+
+
+                                                <div class="modal fade" id="ActUserModal" tabindex="-1" role="dialog" aria-labelledby="ActUserModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-primary">
+                                                                <h3 class="modal-title" id="ActUserModalLabel">Reactivate Account</h3>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to re-activate this user?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <form method="post" action="../home/ReactivateUser">
+                                                                    <p hidden name="userid" value="@u.userID"></p>
+                                                                    <input type="hidden" value="@u.userID" name="userid" />
+                                                                    <button type="submit" class="btn btn-danger">Confirm</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+                @if (!(AllUsers is null))
+                {
+                    if (AllUsers.Item1 != -1)
+                    {
+                        foreach (User u in AllUsers.Item2)
+                        {
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;margin-bottom:20px;padding:20px;">
+                                    <label>
+                                        Name:
+                                    </label>@u.fullname<br />
+                                    <label>
+                                        Email:
+                                    </label>@u.email<br />
+                                    <label>
+                                        Phone:
+                                    </label>@u.phone<br />
+                                    <label>
+                                        Gender:
+                                    </label>@u.gender<br />
+                                    <label>
+                                        Status:
+                                    </label>@u.status<br />
+                                    <label>
+                                        Address:
+                                    </label>@u.line @u.city  @u.state @u.country @u.zipCode<br />
+                                    <label>
+                                        Registeration Time:
+                                    </label>@u.userRegisteredDatetime<br />
+                                    <label>
+                                        Details Addition Time:
+                                    </label>@u.userDetailsAdditionDatetime<br />
+
+                                    <br />
+                                    <br />
+
+
+                                    <br />
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="row">
+                                        @if (u.status != "deactivated")
+                                        {
+                                            <div class="col-sm-12" style="padding-bottom:5px;">
+
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelUserModal">
+                                                    Deactivate
+                                                </button>
+
+                                                <div class="modal fade" id="DelUserModal" tabindex="-1" role="dialog" aria-labelledby="DelUserModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger">
+                                                                <h3 class="modal-title" id="DelUserModalLabel">Deactivate Account</h3>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to deactivate this user?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                                <form method="post" action="../home/DeactivateUser">
+                                                                    <p hidden name="userid" value="@u.userID"></p>
+                                                                    <input type="hidden" value="@u.userID" name="userid" />
+                                                                    <button type="submit" class="btn btn-danger">Confirm</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+
+                                        @if (u.status == "deactivated")
+                                        {
+                                            <div class="col-sm-12" style="padding-bottom:5px;">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ActUserModal">
+                                                    Re-activate
+                                                </button>
+
+
+                                                <div class="modal fade" id="ActUserModal" tabindex="-1" role="dialog" aria-labelledby="ActUserModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-primary">
+                                                                <h3 class="modal-title" id="ActUserModalLabel">Reactivate Account</h3>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to re-activate this user?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <form method="post" action="../home/ReactivateUser">
+                                                                    <p hidden name="userid" value="@u.userID"></p>
+                                                                    <input type="hidden" value="@u.userID" name="userid" />
+                                                                    <button type="submit" class="btn btn-danger">Confirm</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+
+    </div>
+    <br />
+    <br />
+</body>

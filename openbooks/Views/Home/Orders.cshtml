@@ -1,0 +1,330 @@
+﻿@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/_main.cshtml";
+    Tuple<int, Tuple<List<Order>, List<User>, List<Book>>> activeOrders = ViewBag.activeOrders;
+    Tuple<int, Tuple<List<Order>, List<User>, List<Book>>> deliveredOrders = ViewBag.deliveredOrders;
+    Tuple<int, Tuple<List<Order>, List<User>, List<Book>>> cancelledOrders = ViewBag.cancelledOrders;
+    int Ratings = ViewBag.Ratings;
+}
+@using openbooks.Models;
+<body>
+    @section links{
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="~/home/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        </ul>
+    }
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="vertical-menu">
+                    <a href="~/home/Profile">Profile Details</a>
+                    <a href="~/home/Changepassword">Change Password</a>
+                    <a href="~/home/Orders" class="active">Orders</a>
+
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;padding:20px;width:80%;margin:auto;">
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="Active-tab" data-toggle="tab" href="#Active" role="tab" aria-controls="Active" aria-selected="true">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="Delivered-tab" data-toggle="tab" href="#Delivered" role="tab" aria-controls="Delivered" aria-selected="false">Delivered</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="Cancelled-tab" data-toggle="tab" href="#Cancelled" role="tab" aria-controls="Cancelled" aria-selected="false">Cancelled</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade" id="Active" role="tabpanel" aria-labelledby="Active-tab">
+                        <h3 style="margin:3%;">
+                            Active orders:
+                        </h3>
+                        <div style="margin:30px">
+                            @if (activeOrders.Item1 == 5)
+                            {
+                                foreach (Order o in activeOrders.Item2.Item1)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                            <label>
+                                                Order date:
+                                            </label>@o.orderDate<br />
+                                            <label>
+                                                Delivery date:
+                                            </label>@o.deliveryDate<br />
+                                        </div>
+                                    </div>
+                                    foreach (Book bk in activeOrders.Item2.Item3)
+                                    {
+                                        if (o.orderid == bk.orderid)
+                                        {
+                                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                                    <label>
+                                                        Book ID:
+                                                    </label>@bk.bookID<br />
+                                                    <label>
+                                                        Title:
+                                                    </label>@bk.title<br />
+                                                    <label>
+                                                        Author:
+                                                    </label>@bk.author<br />
+                                                    <label>
+                                                        ISBN:
+                                                    </label>@bk.isbn<br />
+                                                    <label>
+                                                        Language:
+                                                    </label>@bk.language<br />
+                                                    <label>
+                                                        Description:
+                                                    </label>@bk.description<br />
+                                                    <label>
+                                                        Publishing Date:
+                                                    </label>@bk.publishingDate<br />
+                                                    <label>
+                                                        Price:
+                                                    </label>@bk.price<br />
+                                                    <label>
+                                                        Discount:
+                                                    </label>@bk.discount<br />
+                                                    <label>
+                                                        Category:
+                                                    </label>@bk.category<br />
+                                                    <label>
+                                                        Quantity:
+                                                    </label>@bk.book_count<br />
+                                                    <br />
+                                                    <br />
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                    
+                                    <div class="col-sm-12" style="padding-bottom:5px;">
+                                        <br />
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelUserModal">
+                                            Cancel Order
+                                        </button>
+                                        <div class="modal fade" id="DelUserModal" tabindex="-1" role="dialog" aria-labelledby="DelUserModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger">
+                                                        <h3 class="modal-title" id="DelUserModalLabel">Cancel Order</h3>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Are you sure you want to cancel this order?
+                                                            The order can not be re-activated
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                        <form method="post" action="../home/cancelOrder">
+                                                            <p hidden name="userType" value="user"></p>
+                                                            <input type="hidden" value="user" name="userType" />
+                                                            <p hidden name="orderid" value="@o.orderid"></p>
+                                                            <input type="hidden" value="@o.orderid" name="orderid" />
+                                                            <button type="submit" class="btn btn-danger">Confirm</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br /><br /><br />
+                                }
+                            }
+                            <br /><br />
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="Delivered" role="tabpanel" aria-labelledby="Delivered-tab">
+                        <h3 style="margin:3%;">
+                            Delivered orders:
+                        </h3>
+
+                        <div style="margin:30px">
+                            @if (deliveredOrders.Item1 == 6)
+                            {
+                                foreach (Order o in deliveredOrders.Item2.Item1)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                            <label>
+                                                Order date:
+                                            </label>@o.orderDate<br />
+                                            <label>
+                                                Delivery date:
+                                            </label>@o.deliveryDate<br />
+                                        </div>
+                                    </div>
+                                    foreach (Book bk in deliveredOrders.Item2.Item3)
+                                    {
+                                        if (o.orderid == bk.orderid)
+                                        {
+                                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                                    <label>
+                                                        Book ID:
+                                                    </label>@bk.bookID<br />
+                                                    <label>
+                                                        Title:
+                                                    </label>@bk.title<br />
+                                                    <label>
+                                                        Author:
+                                                    </label>@bk.author<br />
+                                                    <label>
+                                                        ISBN:
+                                                    </label>@bk.isbn<br />
+                                                    <label>
+                                                        Language:
+                                                    </label>@bk.language<br />
+                                                    <label>
+                                                        Description:
+                                                    </label>@bk.description<br />
+                                                    <label>
+                                                        Publishing Date:
+                                                    </label>@bk.publishingDate<br />
+                                                    <label>
+                                                        Price:
+                                                    </label>@bk.price<br />
+                                                    <label>
+                                                        Discount:
+                                                    </label>@bk.discount<br />
+                                                    <label>
+                                                        Category:
+                                                    </label>@bk.category<br />
+                                                    <label>
+                                                        Quantity:
+                                                    </label>@bk.book_count<br />
+                                                    @if(Ratings <1)
+                                                    {
+                                                        <br />
+                                                        <form method="post" action="../home/Orders" id="atc">
+                                                            <div class="row">
+                                                                <div class="form-group">
+                                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                                    <input type="number" class="form-control" name="stars" placeholder="Stars" />
+                                                                </div>
+                                                                <br />
+                                                                <div class="form-group">
+                                                                    <button type="submit" class="btn btn-primary">Rate This Book</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    }
+                                                    <br /><br />
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                            <br /><br />
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Cancelled" role="tabpanel" aria-labelledby="Cancelled-tab">
+                        <h3 style="margin:3%;">
+                            Cancelled orders:
+                        </h3>
+                        <div style="margin:30px">
+                            @if (cancelledOrders.Item1 == 7)
+                            {
+                                foreach (Order o in cancelledOrders.Item2.Item1)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                            <label>
+                                                Order date:
+                                            </label>@o.orderDate<br />
+                                            <label>
+                                                Delivery date:
+                                            </label>@o.deliveryDate<br />
+                                        </div>
+                                    </div>
+                                    foreach (Book bk in cancelledOrders.Item2.Item3)
+                                    {
+                                        if (o.orderid == bk.orderid)
+                                        {
+                                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+
+                                                    <label>
+                                                        Book ID:
+                                                    </label>@bk.bookID<br />
+                                                    <label>
+                                                        Title:
+                                                    </label>@bk.title<br />
+                                                    <label>
+                                                        Author:
+                                                    </label>@bk.author<br />
+                                                    <label>
+                                                        ISBN:
+                                                    </label>@bk.isbn<br />
+                                                    <label>
+                                                        Language:
+                                                    </label>@bk.language<br />
+                                                    <label>
+                                                        Description:
+                                                    </label>@bk.description<br />
+                                                    <label>
+                                                        Publishing Date:
+                                                    </label>@bk.publishingDate<br />
+                                                    <label>
+                                                        Price:
+                                                    </label>@bk.price<br />
+                                                    <label>
+                                                        Discount:
+                                                    </label>@bk.discount<br />
+                                                    <label>
+                                                        Category:
+                                                    </label>@bk.category<br />
+                                                    <label>
+                                                        Quantity:
+                                                    </label>@bk.book_count<br />
+                                                    <br />
+                                                    <br />
+
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                            <br /><br />
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
+                    $(function () {
+                        $('#myTab li:first-child a').tab('show')
+                    })
+                </script>
+            </div>
+        </div>
+
+
+    </div>
+
+    <br /><br />
+    <br /><br />
+
+</body>

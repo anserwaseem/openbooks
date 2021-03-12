@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  openbooks:
+    image: ${DOCKER_REGISTRY-}openbooks
+    build:
+      context: .
+      dockerfile: openbooks/Dockerfile

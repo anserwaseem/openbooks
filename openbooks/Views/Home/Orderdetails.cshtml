@@ -1,0 +1,300 @@
+﻿
+@{
+    ViewBag.Title = "Orderdetails | Admin Panel";
+    Layout = "~/Views/Shared/_adminlayout.cshtml";
+    Tuple<int, Tuple<List<Order>, List<User>, List<Book>>> AllOrders = ViewBag.AllOrders;
+}
+
+
+@using openbooks.Models;
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails" class="active">Orders</a>
+                    <a href="~/home/Usersdetails">Users</a>
+                    <a href="~/home/Books">Books</a>
+                    <a href="~/home/Wishlistsdetails">Wishlists</a>
+                    <a href="~/home/Requestsdetails">Requests</a>
+                    <a href="~/home/Settings">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;padding:10px;width:80%;margin:auto;">
+                <h3>Search By Order ID</h3>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="../home/getAllOrders">
+                            <p hidden name="orderType" value="8"></p>
+                            <input type="hidden" value="8" name="orderType" />
+                            <p hidden name="orderDateFrom" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateFrom" />
+                            <p hidden name="orderDateTo" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateTo" />
+                            <div class="form-group">
+                                <input type="search" class="form-control" name="orderid" placeholder="Order ID" size="50" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <h3>Search By Date: </h3><br />
+                        <form method="post" action="../home/getAllOrders">
+                            <div class="form-group">
+                                <p hidden name="orderType" value="1"></p>
+                                <input type="hidden" value="1" name="orderType" />
+                                <h4>From: </h4>
+                                <input type="date" name="orderDateFrom" style="margin-left: 20px;">
+                                <h4>To: </h4>
+                                <input type="date" name="orderDateTo" style="margin-left: 20px;">
+                                <p hidden name="orderid" value="0"></p>
+                                <input type="hidden" value="0" name="orderid" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getAllOrders">
+                            <p hidden name="orderType" value="2"></p>
+                            <input type="hidden" value="2" name="orderType" />
+                            <p hidden name="orderDateFrom" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateFrom" />
+                            <p hidden name="orderDateTo" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateTo" />
+                            <p hidden name="orderid" value="0"></p>
+                            <input type="hidden" value="0" name="orderid" />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">View All Active Orders</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getAllOrders">
+                            <p hidden name="orderType" value="3"></p>
+                            <input type="hidden" value="3" name="orderType" />
+                            <p hidden name="orderDateFrom" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateFrom" />
+                            <p hidden name="orderDateTo" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateTo" />
+                            <p hidden name="orderid" value="0"></p>
+                            <input type="hidden" value="0" name="orderid" />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">View All Delivered Orders</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getAllOrders">
+                            <p hidden name="orderType" value="4"></p>
+                            <input type="hidden" value="4" name="orderType" />
+                            <p hidden name="orderDateFrom" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateFrom" />
+                            <p hidden name="orderDateTo" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateTo" />
+                            <p hidden name="orderid" value="0"></p>
+                            <input type="hidden" value="0" name="orderid" />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">View All Cancelled Orders</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getAllOrders">
+                            <p hidden name="orderType" value="0"></p>
+                            <input type="hidden" value="0" name="orderType" />
+                            <p hidden name="orderDateFrom" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateFrom" />
+                            <p hidden name="orderDateTo" value="1900-01-01"></p>
+                            <input type="hidden" value="1900-01-01" name="orderDateTo" />
+                            <p hidden name="orderid" value="0"></p>
+                            <input type="hidden" value="0" name="orderid" />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">View All Orders</button>
+                            </div>
+                        </form>
+                        <br />
+                    </div>
+                </div>
+
+                @if (!(AllOrders is null))
+                {
+                    if (AllOrders.Item1 != -1)
+                    {
+                        foreach (Order o in AllOrders.Item2.Item1)
+                        {
+                            string OrderStatus = " ";
+
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                    <h4>Order: </h4>
+                                    <label>
+                                        Order ID:
+                                    </label>@o.orderid<br />
+
+                                    @if (o.status == 0)
+                                    { OrderStatus = "Cancelled"; }
+                                    else if (o.status == 1)
+                                    { OrderStatus = "Active"; }
+                                    else { OrderStatus = "Delivered"; }
+
+                                    <label>
+                                        Order Status:
+                                    </label>@OrderStatus<br />
+                                    <label>
+                                        Order date:
+                                    </label>@o.orderDate<br />
+                                    <label>
+                                        Delivery date:
+                                    </label>@o.deliveryDate<br />
+                                </div>
+                            </div>
+                            foreach (User u in AllOrders.Item2.Item2)
+                            {
+                                if (o.userid == u.userID && o.orderDate == u.orderDate)
+                                {
+
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                            <h4>User Details: </h4>
+                                            <label>
+                                                Name:
+                                            </label>@u.fullname<br />
+                                            <label>
+                                                Email:
+                                            </label>@u.email<br />
+                                            <label>
+                                                Phone:
+                                            </label>@u.phone<br />
+                                            <label>
+                                                Gender:
+                                            </label>@u.gender<br />
+                                            <label>
+                                                Status:
+                                            </label>@u.status<br />
+                                            <label>
+                                                Address:
+                                            </label>@u.line @u.city  @u.state @u.country @u.zipCode<br />
+                                            <label>
+                                                Registeration Time:
+                                            </label>@u.userRegisteredDatetime<br />
+                                            <label>
+                                                Details Addition Time:
+                                            </label>@u.userDetailsAdditionDatetime<br />
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            foreach (Book bk in AllOrders.Item2.Item3)
+                            {
+                                if (o.orderid == bk.orderid)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                            <h4>Books Details: </h4>
+                                            <label>
+                                                Book ID:
+                                            </label>@bk.bookID<br />
+                                            <label>
+                                                Title:
+                                            </label>@bk.title<br />
+                                            <label>
+                                                Quantity:
+                                            </label>@bk.book_count<br />
+                                            <label>
+                                                Author:
+                                            </label>@bk.author<br />
+                                            <label>
+                                                ISBN:
+                                            </label>@bk.isbn<br />
+                                            <label>
+                                                Language:
+                                            </label>@bk.language<br />
+                                            <label>
+                                                Description:
+                                            </label>@bk.description<br />
+                                            <label>
+                                                Publishing Date:
+                                            </label>@bk.publishingDate<br />
+                                            <label>
+                                                Price:
+                                            </label>@bk.price<br />
+                                            <label>
+                                                Discount:
+                                            </label>@bk.discount<br />
+                                            <label>
+                                                Category:
+                                            </label>@bk.category<br />
+                                            <br />
+                                            <br />
+
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            if (o.status == 1)
+                            {
+                                <div class="col-sm-12" style="padding-bottom:5px;">
+                                    <br />
+                                    <form method="post" action="../home/AdminOrderDelivered">
+                                        <p hidden name="orderid" value="@o.orderid"></p>
+                                        <input type="hidden" id="hf" value="@o.orderid" name="orderid" />
+                                        <p hidden name="userid" value="@o.userid"></p>
+                                        <input type="hidden" id="hf" value="@o.userid" name="userid" />
+                                        <button class="btn btn-primary" type="submit">Delivered</button>
+                                    </form>
+                                    <br />
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DelUserModal">
+                                        Cancel Order
+                                    </button>
+                                    <div class="modal fade" id="DelUserModal" tabindex="-1" role="dialog" aria-labelledby="DelUserModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger">
+                                                    <h3 class="modal-title" id="DelUserModalLabel">Cancel Order</h3>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>
+                                                        Are you sure you want to cancel this order?
+                                                        The order can not be re-activated
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                    <form method="post" action="../home/cancelOrder">
+                                                        <p hidden name="userType" value="admin"></p>
+                                                        <input type="hidden" value="admin" name="userType" />
+                                                        <p hidden name="orderid" value="@o.orderid"></p>
+                                                        <input type="hidden" value="@o.orderid" name="orderid" />
+                                                        <button type="submit" class="btn btn-danger">Confirm</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br /><br /><br />
+                            }
+                            <br /><br />
+                        }
+
+                    }
+                }
+
+            </div>
+            </div>
+
+
+        </div>
+    </div>
+    <br />
+    <br />
+</body>

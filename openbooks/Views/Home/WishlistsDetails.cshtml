@@ -1,0 +1,173 @@
+﻿@{
+    ViewBag.Title = "WishlistsDetails | Admin Panel";
+    Layout = "~/Views/Shared/_adminlayout.cshtml";
+    Tuple<int, List<Wishlist>, List<User>, List<Book>> Wishlist = ViewBag.Wishlist;
+}
+@using openbooks.Models;
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+
+                <div class="vertical-menu">
+                    <a href="~/home/Orderdetails">Orders</a>
+                    <a href="~/home/Usersdetails">Users</a>
+                    <a href="~/home/Books">Books</a>
+                    <a href="~/home/Wishlistsdetails" class="active">Wishlists</a>
+                    <a href="~/home/Requestsdetails">Requests</a>
+                    <a href="~/home/Settings">Settings</a>
+                </div>
+
+            </div>
+            <div class="col-sm-10" style=" box-shadow: 2px 8px 8px 4px lightblue;width:80%;margin:auto;">
+
+                <h2>View Wishlists data</h2>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="../home/getWishlistsForAdmin">
+                            <div class="form-group">
+                                <input type="search" class="form-control" name="searchterm" placeholder="Full Name | Email" size="50" />
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        <br /><br />
+                        <form method="post" action="../home/getWishlistsForAdmin">
+                            <div class="form-group">
+                                <p hidden name="searchterm" value="all"></p>
+                                <input type="hidden" value="all" name="searchterm" />
+                                <button type="submit" class="btn btn-primary">View All Wishlists</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br />
+                @if (!(Wishlist is null))
+                {
+                    if (Wishlist.Item1 != -1)
+                    {
+                        foreach (Wishlist w in Wishlist.Item2)
+                        {
+                            <div class="row" style="margin-left: auto;margin-right:auto;">
+                                <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                    <h4>Wishlist: </h4>
+                                    <label>
+                                        Wishlist ID:
+                                    </label>@w.wishlistid<br />
+                                    <label>
+                                        Wishlist User:
+                                    </label>@w.userid<br />
+                                    <label>
+                                        Wishlist Book:
+                                    </label>@w.bookid<br />
+                                    <label>
+                                        Wishlist date:
+                                    </label>@w.wishlistedTime<br />
+                                </div>
+                            </div>
+                            foreach (User u in Wishlist.Item3)
+                            {
+                                if (w.userid == u.userID && w.wishlistedTime == u.wishlistedTime)
+                                {
+
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                            <h4>User Details: </h4>
+                                            <label>
+                                                User ID:
+                                            </label>@u.userID<br />
+                                            <label>
+                                                Name:
+                                            </label>@u.fullname<br />
+                                            <label>
+                                                Email:
+                                            </label>@u.email<br />
+                                            <label>
+                                                Phone:
+                                            </label>@u.phone<br />
+                                            <label>
+                                                Gender:
+                                            </label>@u.gender<br />
+                                            <label>
+                                                Status:
+                                            </label>@u.status<br />
+                                            <label>
+                                                Address:
+                                            </label>@u.line @u.city  @u.state @u.country @u.zipCode<br />
+                                            <label>
+                                                Registeration Time:
+                                            </label>@u.userRegisteredDatetime<br />
+                                            <label>
+                                                Details Addition Time:
+                                            </label>@u.userDetailsAdditionDatetime<br />
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            foreach (Book bk in Wishlist.Item4)
+                            {
+                                if (w.bookid == bk.bookID && w.wishlistid == bk.wishlistid)
+                                {
+                                    <div class="row" style="margin-left: auto;margin-right:auto;">
+                                        <div class="col-sm-12" style=" box-shadow: 2px 8px 8px 4px lightblue; margin-top: 20px;padding:20px;">
+                                            <h4>Book Details: </h4>
+                                            <label>
+                                                Book ID:
+                                            </label>@bk.bookID<br />
+                                            <label>
+                                                Title:
+                                            </label>@bk.title<br />
+                                            <label>
+                                                Quantity:
+                                            </label>@bk.book_count<br />
+                                            <label>
+                                                Author:
+                                            </label>@bk.author<br />
+                                            <label>
+                                                ISBN:
+                                            </label>@bk.isbn<br />
+                                            <label>
+                                                Language:
+                                            </label>@bk.language<br />
+                                            <label>
+                                                Description:
+                                            </label>@bk.description<br />
+                                            <label>
+                                                Publishing Date:
+                                            </label>@bk.publishingDate<br />
+                                            <label>
+                                                Price:
+                                            </label>@bk.price<br />
+                                            <label>
+                                                Discount:
+                                            </label>@bk.discount<br />
+                                            <label>
+                                                Category:
+                                            </label>@bk.category<br />
+                                            <br />
+                                            <br />
+
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            <br /><br />
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+
+    </div>
+    <br />
+    <br />
+</body>

@@ -1,0 +1,374 @@
+﻿
+@{
+    ViewBag.Title = "OpenBook";
+    Layout = "~/Views/Shared/_main.cshtml";
+}
+@using openbooks.Models;
+@model  Tuple<List<string>, Tuple<List<Book>, List<Book>, List<Book>>>
+<body>
+    @section links{
+        <ul class="nav navbar-nav navbar-right">
+            @if (CRUD.CuserID == 0)
+            {
+                <li><a href="~/home/Login"><span class="glyphicon glyphicon-user"></span> Hello, Sign in</a></li>
+            }
+            else
+            {
+                <li><a href="~/home/Profile"><span class="glyphicon glyphicon-user"></span> Your Profile</a></li>
+            }
+            <li><a href="~/home/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+
+        </ul>
+
+    }
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            @for (var i = 1; i < 5; i++)
+            {
+                <li data-target="#myCarousel" data-slide-to="@i"></li>
+            }
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <img src="~/imgs/banner.png" alt="Image" />
+            </div>
+            @for (var i = 1; i < 5; i++)
+            {
+
+                <div class="item">
+                    <img src="~/imgs/banner.png" alt="Image">
+
+                </div>
+            }
+
+        </div>
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    <br /><br />
+
+    <div class="container">
+
+        <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:auto;">
+            <center>
+                <form method="post" action="../Home/search">
+                    <div class="form-group" style="padding:20px;">
+                        <input type="search" class="form-control" name="searchterm" placeholder="Title | Author | ISBN" size="50" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </center>
+        </div>
+
+
+    </div>
+    <br />
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#catg">
+                        <span class="icon-bar" style="background-color:black"></span>
+                        <span class="icon-bar" style="background-color:black"></span>
+                        <span class="icon-bar" style="background-color:black"></span>
+                    </button>
+                    <label class="navbar-brand">Categories</label>
+                </div>
+                <div class="collapse navbar-collapse" id="catg">
+                    <ul class="nav navbar-nav">
+                        @foreach (string c in Model.Item1)
+                        {
+                            <li>
+
+                                <div class="row" style="margin:auto;">
+                                    <div class="col-sm-12">
+                                        <form method="post" action="../home/Category" id="ct">
+                                            <p hidden name="categoryType" value="@c"></p>
+                                            <input type="hidden" value="@c" name="categoryType" />
+                                            <h3>
+                                                <button class="btn btn-default" type="submit" onclick="document.getElementById('ct').submit()">@c</button><br />
+                                            </h3>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </li>
+
+                        }
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="col-sm-10">
+                <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:auto;">
+
+                    <div class="col-sm-12">
+                        <h3>
+                            New Arrival:
+                        </h3>
+
+                        <br />
+                        @{ var bookCount = 0; }
+                        @foreach (Book bk in Model.Item2.Item1)
+                        {
+                            <div class="col-sm-3">
+                                <div class="shadow-lg p-4 mb-4 bg-white">
+                                    <div class="card">
+                                        <div class="row">
+
+                                            <div class="col-sm-12">
+                                                <img src="~/imgs/dum.png" style="height:100px;width:60%;padding-top:10px">
+                                            </div>
+
+
+                                            <form method="post" action="../home/AddToCart" id="atc">
+                                                <div class="col-sm-12">
+                                                    <p>@bk.title</p>
+                                                    <p class="price">Price: @bk.price</p>
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" onclick="document.getElementById('atc').submit()">Add to Cart</button>
+                                                </div>
+                                            </form>
+                                            <form method="post" action="../home/getbook" id="gb">
+                                                <div class="col-sm-12">
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                    <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            bookCount = bookCount + 1;
+                            if (bookCount > 3) { break; }
+
+                        }
+                        <div class="col-sm-12">
+                            <form method="post" action="../home/Viewall" id="va">
+                                <p hidden name="sectionNo" value="1"></p>
+                                <input type="hidden" value="1" name="sectionNo" />
+                                <h3>
+                                    <button class="btn btn-primary" type="submit" onclick="document.getElementById('va').submit()">View All</button>
+                                </h3>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <br />
+                <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:auto;">
+
+                    <div class="col-sm-12">
+                        <h3>
+                            30% off:
+                        </h3>
+                        <br />
+                        @{ var bookCount30 = 0; }
+                        @foreach (Book bk in Model.Item2.Item2)
+                        {
+                            <div class="col-sm-3">
+                                <div class="shadow-lg p-4 mb-4 bg-white">
+                                    <div class="card">
+                                        <div class="row">
+
+                                            <div class="col-sm-12">
+                                                <img src="~/imgs/dum.png" style="height:100px;width:60%;padding-top:10px">
+                                            </div>
+
+
+                                            <form method="post" action="../home/AddToCart" id="atc">
+                                                <div class="col-sm-12">
+                                                    <p>@bk.title</p>
+                                                    <p class="price">Price: @bk.price</p>
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" onclick="document.getElementById('atc').submit()">Add to Cart</button>
+                                                </div>
+                                            </form>
+                                            <form method="post" action="../home/getbook" id="gb">
+                                                <div class="col-sm-12">
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                    <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            bookCount30 = bookCount30 + 1;
+                            if (bookCount30 > 3) { break; }
+                        }
+
+                        <div class="col-sm-12">
+                            <form method="post" action="../home/Viewall" id="va">
+                                <p hidden name="sectionNo" value="2"></p>
+                                <input type="hidden" value="2" name="sectionNo" />
+                                <h3>
+                                    <button class="btn btn-primary" type="submit" onclick="document.getElementById('va').submit()">View All</button>
+                                </h3>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                <br />
+                <br />
+                <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:auto;">
+
+                    <div class="col-sm-12">
+
+                        <h3>
+                            50% off:
+                        </h3>
+                        <br />
+
+                        @{ var bookCount50 = 0; }
+                        @foreach (Book bk in Model.Item2.Item3)
+                        {
+                            <div class="col-sm-3">
+                                <div class="shadow-lg p-4 mb-4 bg-white">
+                                    <div class="card">
+                                        <div class="row">
+
+                                            <div class="col-sm-12">
+                                                <img src="~/imgs/dum.png" style="height:100px;width:60%;padding-top:10px">
+                                            </div>
+
+
+                                            <form method="post" action="../home/AddToCart" id="atc">
+                                                <div class="col-sm-12">
+                                                    <p>@bk.title</p>
+                                                    <p class="price">Price: @bk.price</p>
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" onclick="document.getElementById('atc').submit()">Add to Cart</button>
+                                                </div>
+                                            </form>
+                                            <form method="post" action="../home/getbook" id="gb">
+                                                <div class="col-sm-12">
+                                                    <p hidden name="bookid" value="@bk.bookID"></p>
+                                                    <input type="hidden" id="hf" value="@bk.bookID" name="bookid" />
+                                                    <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            bookCount50 = bookCount50 + 1;
+                            if (bookCount50 > 3) { break; }
+                        }
+                        <div class="col-sm-12">
+                            <form method="post" action="../home/Viewall" id="va">
+                                <p hidden name="sectionNo" value="3"></p>
+                                <input type="hidden" value="3" name="sectionNo" />
+                                <h3>
+                                    <button class="btn btn-primary" type="submit" onclick="document.getElementById('va').submit()">View All</button>
+                                </h3>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row" style="box-shadow: 2px 8px 8px 4px lightblue;padding:10px;margin:auto;">
+
+                    <div class="col-sm-12">
+
+                        @*<h3>
+                                Sold Out:
+                            </h3>
+                            <br />
+
+                            @{ var bookCountSO = 0; }
+                            @foreach (Book bk in Model.Item2.Item3)
+                            {
+                                <div class="col-sm-3">
+                                    <div class="shadow-lg p-4 mb-4 bg-white">
+                                        <div class="card">
+                                            <div class="row">
+
+                                                <div class="col-sm-12">
+                                                    <img src="~/imgs/dum.png" style="height:100px;width:60%;padding-top:10px">
+                                                </div>
+
+                                                <form method="post" action="../home/getbook" id="gb">
+                                                    <div class="col-sm-12">
+                                                        <p hidden name="bookid" value="@bk.bookID"></p>
+                                                        <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                        <button type="submit" onclick="document.getElementById('gb').submit()">View Book</button>
+                                                    </div>
+                                                </form>
+                                                <form method="post" action="../home/AddToWishlist" id="atw">
+                                                    <div class="col-sm-12">
+                                                        <p>@bk.title</p>
+                                                        <p class="price">Price: @bk.price</p>
+                                                        <p hidden name="bookid" value="@bk.bookID"></p>
+                                                        <input type="hidden" value="@bk.bookID" name="bookid" />
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <button type="submit" onclick="document.getElementById('atw').submit()">Add to Wishlist</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                bookCountSO = bookCountSO + 1;
+                                if (bookCountSO > 3) { break; }
+                            }*@
+                        <div class="col-sm-12">
+                            <form method="post" action="../home/Viewall" id="va">
+                                <p hidden name="sectionNo" value="5"></p>
+                                <input type="hidden" value="5" name="sectionNo" />
+                                <h3>
+                                    <button class="btn btn-primary" type="submit" onclick="document.getElementById('va').submit()">Sold Out Books</button>
+                                </h3>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <br />
+    <br />
+</body>
+

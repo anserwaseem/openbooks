@@ -1,0 +1,132 @@
+﻿.card {
+    box-shadow: 0 4px 8px 0 lightblue;
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+}
+
+.vertical-menu {
+    width: auto;
+    height: auto;
+    box-shadow: 2px 8px 8px 4px lightblue;
+}
+
+    .vertical-menu a {
+        background-color: white;
+        color: black;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
+    }
+
+        .vertical-menu a:hover {
+            background-color: cornflowerblue;
+        }
+
+        .vertical-menu a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+.login {
+    text-align: left;
+    padding-top: 80px;
+    padding-bottom: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: 2px 8px 8px 4px lightblue;
+    max-width: 400px;
+    margin: auto;
+    font-family: arial;
+}
+
+a.cat:link, a.cat:visited {
+    background-color: white;
+    color: cornflowerblue;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+}
+
+.bookpage {
+    text-align: left;
+    padding-top: 40px;
+    padding-bottom: 80px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: 2px 8px 8px 4px lightblue;
+    width: auto;
+    height: auto;
+    font-family: arial;
+}
+
+.getbuttons {
+    align-content: center;
+    padding: 20px;
+}
+
+
+
+.register {
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: 2px 8px 8px 4px lightblue;
+    max-width: 400px;
+    margin: auto;
+    font-family: arial;
+}
+
+.editinfo {
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: 2px 8px 8px 4px lightblue;
+    max-width: 400px;
+    margin: auto;
+    font-family: arial;
+}
+
+.price {
+    color: grey;
+    font-size: 12px;
+}
+
+.card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+}
+
+    .card button:hover {
+        opacity: 0.7;
+    }
+
+.profile {
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-shadow: 2px 8px 8px 4px lightblue;
+    max-width: 50%;
+    font-family: arial;
+    margin: auto;
+}
+
+.right {
+    text-align: right;
+}
